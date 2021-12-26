@@ -1,0 +1,82 @@
+version: '3'
+services:
+  # API
+  api:
+    build: .
+    volumes:
+      - './backend/:/var/www/html'
+    command: bash -c "npm install && npm run start:dev"
+    ports:
+      - 3000:3000
+      - 9229:9229
+    restart: unless-stopped
+    depends_on:
+      - 'database'
+    networks:
+      - app
+
+  # FRONTEND
+  frontend:
+    image: node:16-alpine
+    working_dir: /var/www/html
+    command: npm run serve
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    volumes:
+      - './frontend/:/var/www/html'
+    networks:
+      - app
+
+  # DATABASE
+  database:
+    image: 'mysql:8.0'
+    ports:
+      - '${DB_PORT}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    restart: unless-stopped
+    volumes:
+      - 'vuenestboilerplate:/var/lib/mysql'
+    networks:
+      - app
+
+  # PHPMYADMIN
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '5005:80'
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    restart: unless-stopped
+    networks:
+      - app
+
+  # MAILHOG
+  mailhog_app:
+    container_name: mailhog_app
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - app
+
+# NETWORKS
+networks:
+  app:
+    driver: bridge
+
+# VOLUMES
+volumes:
+  vuenestboilerplate:
+    driver: local
