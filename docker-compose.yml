@@ -30,20 +30,43 @@ services:
 
   # DATABASE
   database:
-    image: 'mysql:8.0'
-    ports:
-      - '${DB_PORT}:3306'
-    environment:
-      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-      MYSQL_DATABASE: '${DB_DATABASE}'
-      MYSQL_USER: '${DB_USERNAME}'
-      MYSQL_PASSWORD: '${DB_PASSWORD}'
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    container_name: pg_container
+    image: postgres
     restart: unless-stopped
+    environment:
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      PGDATA: /var/lib/postgresql/data
     volumes:
-      - 'vuenestboilerplate:/var/lib/mysql'
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT}:5432'
     networks:
       - app
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - '5050:80'
+    networks:
+      - app
+
+    # image: 'mysql:8.0'
+    # ports:
+    #   - '${DB_PORT}:3306'
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    #   MYSQL_DATABASE: '${DB_DATABASE}'
+    #   MYSQL_USER: '${DB_USERNAME}'
+    #   MYSQL_PASSWORD: '${DB_PASSWORD}'
+    #   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    # restart: unless-stopped
 
   # PHPMYADMIN
   phpmyadmin:
@@ -78,5 +101,5 @@ networks:
 
 # VOLUMES
 volumes:
-  vuenestboilerplate:
+  postgres-data:
     driver: local

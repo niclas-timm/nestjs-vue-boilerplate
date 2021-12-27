@@ -8,7 +8,7 @@ async function bootstrap() {
 
   // Allow requests from frontend.
   app.enableCors({
-    origin: configService.get('FRONTEND_URL'),
+    origin: 'http://localhost:8080',
   });
   await app.listen(3000);
 }

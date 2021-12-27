@@ -11,6 +11,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './controllers/auth.controller';
 import { ConfigModule } from '@nestjs/config';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { GoogleOAuthController } from './controllers/google-oauth.controller';
 
 @Module({
   providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
@@ -26,6 +27,6 @@ import { GoogleStrategy } from './strategies/google.strategy';
     TypeOrmModule.forFeature([ForgotPasswordToken]),
   ],
   exports: [AuthService],
-  controllers: [AuthController],
+  controllers: [AuthController, GoogleOAuthController],
 })
 export class AuthModule {}

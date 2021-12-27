@@ -293,6 +293,8 @@ export class AuthService {
       req.user.name,
       req.user.email,
       '123456',
+      req.user.avatar,
+      'google',
     );
     return {
       user: newUser,

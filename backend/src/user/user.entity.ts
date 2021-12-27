@@ -26,11 +26,11 @@ export class User {
   @Column({ default: false })
   email_verified: boolean;
 
-  @Column()
-  social_channel?: string;
+  @Column({ nullable: true })
+  social_channel: string;
 
-  @Column()
-  avatar?: string;
+  @Column({ nullable: true })
+  avatar: string;
 
   @CreateDateColumn()
   created_at: Date;
