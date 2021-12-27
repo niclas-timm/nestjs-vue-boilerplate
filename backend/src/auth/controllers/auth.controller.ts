@@ -1,8 +1,8 @@
-import { VerifyEmailTokenDto } from './dtos/verify-email-token.dto';
-import { UpdatePasswordDto } from './dtos/update-password.dto';
-import { AuthService } from './auth.service';
-import { JwtGuard } from './jwt.guard';
-import { LocalGuard } from './local.guard';
+import { VerifyEmailTokenDto } from '../dtos/verify-email-token.dto';
+import { UpdatePasswordDto } from '../dtos/update-password.dto';
+import { AuthService } from '../auth.service';
+import { JwtGuard } from '../guards/jwt.guard';
+import { LocalGuard } from '../guards/local.guard';
 import {
   Body,
   Controller,
@@ -15,10 +15,10 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { RegisterUserDto } from './dtos/register-user.dto';
-import { ForgotPasswordDto } from './dtos/forgot-password.dto';
-import { ResetPasswordDto } from './dtos/reset-password.dto';
-import UserAndAccessTokenInterface from './interfaces/UserAndAccessTokenInterface';
+import { RegisterUserDto } from '../dtos/register-user.dto';
+import { ForgotPasswordDto } from '../dtos/forgot-password.dto';
+import { ResetPasswordDto } from '../dtos/reset-password.dto';
+import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Controller('auth')
 export class AuthController {

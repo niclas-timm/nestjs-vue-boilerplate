@@ -32,7 +32,7 @@ export class UserService {
   async createUser(
     name: string,
     email: string,
-    password: string,
+    password?: string,
   ): Promise<User> {
     const newUser = await this.userRepository.create({ name, email, password });
     const result = await this.userRepository.save(newUser);

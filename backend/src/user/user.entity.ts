@@ -18,13 +18,19 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
+  password?: string;
 
   @Column({ default: true })
   isActive: boolean;
 
   @Column({ default: false })
   email_verified: boolean;
+
+  @Column()
+  social_channel?: string;
+
+  @Column()
+  avatar?: string;
 
   @CreateDateColumn()
   created_at: Date;

@@ -263,4 +263,40 @@ export class AuthService {
 
     return updatedUser;
   }
+
+  /**
+   * Log in or register with Google.
+   *
+   * @param {Request} req
+   *   The request object.
+   *
+   * @returns
+   */
+  async googleLogin(req): Promise<UserAndAccessTokenInterface> | null {
+    // By the google strategy / google guard, the user is appended to the request object.
+    if (!req.user) {
+      return;
+    }
+
+    // Check if there is a user with this email already:
+    const existingUser: User = await this.userService.find({
+      email: req.user.email,
+    });
+    if (existingUser) {
+      return {
+        user: existingUser,
+        access_token: this.createAccessToken(existingUser),
+      };
+    }
+
+    const newUser = await this.userService.createUser(
+      req.user.name,
+      req.user.email,
+      '123456',
+    );
+    return {
+      user: newUser,
+      access_token: this.createAccessToken(newUser),
+    };
+  }
 }
