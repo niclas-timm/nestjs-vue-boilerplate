@@ -32,6 +32,9 @@
             </div>
           </div>
         </div>
+
+        <!-- Profile icon on the right side -->
+        <profile-menu></profile-menu>
       </div>
     </div>
 
@@ -54,7 +57,9 @@
 <script>
   import MobileNavbarItem from './Navbar/MobileNavbarItem.vue';
   import NavbarItem from './Navbar/NavbarItem.vue';
-  import BurgerButton from './../Buttons/BurgerButton.vue';
+  import BurgerButton from '../Buttons/BurgerButton.vue';
+  import ProfileMenu from './Navbar/ProfileMenu/ProfileMenu.vue';
+
   export default {
     // ======================
     // DATA
@@ -74,6 +79,7 @@
           },
         ],
         showMobileMenu: false,
+        showProfileMenu: false,
       };
     },
     // ======================
@@ -83,6 +89,8 @@
       NavbarItem,
       MobileNavbarItem,
       BurgerButton,
+      ProfileMenu,
+      ProfileMenu,
     },
     // ======================
     // Methods
@@ -90,6 +98,13 @@
     methods: {
       toggleMobileMenu() {
         this.showMobileMenu = !this.showMobileMenu;
+      },
+      toggleProfileMenu() {
+        this.showProfileMenu = !this.showProfileMenu;
+      },
+      logout() {
+        window.localStorage.removeItem('access_token');
+        this.$store.dispatch('logout');
       },
     },
   };

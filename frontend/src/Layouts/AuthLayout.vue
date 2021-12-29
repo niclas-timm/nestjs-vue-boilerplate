@@ -1,7 +1,7 @@
 <template>
   <base-layout :headline="headline">
     <template #header>
-      <default-navbar></default-navbar>
+      <authenticated-navbar></authenticated-navbar>
     </template>
 
     <div v-if="$store.state.auth.loadingUser">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import DefaultNavbar from '../components/Navigation/DefaultNavbar.vue';
+  import AuthenticatedNavbar from '../components/Navigation/AuthenticatedNavbar.vue';
   import BaseLayout from './BaseLayout.vue';
   import Spinner from '../components/Widgets/Spinner/Spinner.vue';
 
@@ -32,7 +32,7 @@
       };
     },
     props: ['headline'],
-    components: { BaseLayout, DefaultNavbar, Spinner },
+    components: { BaseLayout, AuthenticatedNavbar, Spinner },
     async beforeCreate() {
       await this.$store.dispatch('fetchUser');
     },
