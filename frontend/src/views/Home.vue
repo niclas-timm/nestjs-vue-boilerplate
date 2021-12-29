@@ -1,9 +1,13 @@
 <template>
   <div>
     <div class="mb-4">Hello world</div>
-    <primary-button :loading="false" @click="googleLogin()"
-      >Click me bitch</primary-button
-    >
+    <div>
+      {{
+        $store.state.auth.user.name
+          ? $store.state.auth.user.name
+          : 'Not logged in'
+      }}
+    </div>
   </div>
 </template>
 

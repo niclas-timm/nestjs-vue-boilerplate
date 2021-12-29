@@ -1,6 +1,7 @@
 <template>
   <auth-layout :headline="headline">
-    <div>dasboard</div>
+    <div>dashboard</div>
+    <div @click="googleLogout">Logout with google</div>
   </auth-layout>
 </template>
 <script>
@@ -13,5 +14,11 @@
       };
     },
     components: { AuthLayout },
+    methods: {
+      async googleLogout() {
+        window.localStorage.removeItem('access_token');
+        this.$store.dispatch('logout');
+      },
+    },
   };
 </script>
