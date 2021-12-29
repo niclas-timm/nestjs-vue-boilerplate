@@ -34,7 +34,11 @@
         </div>
 
         <!-- Profile icon on the right side -->
-        <profile-menu></profile-menu>
+        <profile-menu
+          v-if="
+            !$store.state.auth.loadingUser && $store.state.auth.isAuthenticated
+          "
+        ></profile-menu>
       </div>
     </div>
 

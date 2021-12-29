@@ -9,11 +9,7 @@
       @click="$emit('click-button')"
     >
       <span class="sr-only">Open user menu</span>
-      <img
-        class="h-8 w-8 rounded-full"
-        :src="$store.state.auth.user.avatar"
-        alt=""
-      />
+      <img class="h-8 w-8 rounded-full" :src="$store.state.auth.user.avatar" />
     </button>
   </div>
 </template>

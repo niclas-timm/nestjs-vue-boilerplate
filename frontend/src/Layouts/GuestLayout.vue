@@ -4,8 +4,9 @@
       <default-navbar></default-navbar>
     </template>
 
-    <spinner size="large" v-if="loading"></spinner>
-    <slot v-else></slot>
+    <!-- <spinner size="large" v-if="loading"></spinner>
+    <slot v-else></slot> -->
+    <slot></slot>
   </base-layout>
 </template>
 

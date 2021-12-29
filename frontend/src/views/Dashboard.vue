@@ -1,8 +1,5 @@
 <template>
-  <auth-layout :headline="headline">
-    <div>dashboard</div>
-    <div @click="googleLogout">Logout with google</div>
-  </auth-layout>
+  <auth-layout :headline="headline"> </auth-layout>
 </template>
 <script>
   import AuthLayout from '../Layouts/AuthLayout.vue';
@@ -14,11 +11,5 @@
       };
     },
     components: { AuthLayout },
-    methods: {
-      async googleLogout() {
-        window.localStorage.removeItem('access_token');
-        this.$store.dispatch('logout');
-      },
-    },
   };
 </script>
