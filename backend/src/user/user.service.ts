@@ -1,3 +1,4 @@
+import { UserInterface } from './interfaces/UserInterface';
 import {
   BadRequestException,
   Injectable,
@@ -29,19 +30,16 @@ export class UserService {
     return user;
   }
 
-  async createUser(
-    name: string,
-    email: string,
-    password?: string,
-    avatar?: string,
-    social_channel?: string,
-  ): Promise<User> {
+  async createUser(user: UserInterface): Promise<User> {
+    const { name, email, password, avatar, social_channel, email_verified } =
+      user;
     const newUser = await this.userRepository.create({
       name,
       email,
-      password,
-      avatar,
-      social_channel,
+      password: password || '',
+      avatar: avatar || '',
+      social_channel: social_channel || '',
+      email_verified: email_verified || false,
     });
     const result = await this.userRepository.save(newUser);
     return result;

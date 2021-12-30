@@ -57,31 +57,6 @@ services:
     networks:
       - app
 
-    # image: 'mysql:8.0'
-    # ports:
-    #   - '${DB_PORT}:3306'
-    # environment:
-    #   MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-    #   MYSQL_DATABASE: '${DB_DATABASE}'
-    #   MYSQL_USER: '${DB_USERNAME}'
-    #   MYSQL_PASSWORD: '${DB_PASSWORD}'
-    #   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    # restart: unless-stopped
-
-  # PHPMYADMIN
-  phpmyadmin:
-    depends_on:
-      - database
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - '5005:80'
-    environment:
-      PMA_HOST: database
-      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-    restart: unless-stopped
-    networks:
-      - app
-
   # MAILHOG
   mailhog_app:
     container_name: mailhog_app

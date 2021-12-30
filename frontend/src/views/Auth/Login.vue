@@ -12,6 +12,11 @@
           @click="loginWithGoogle"
         >
         </google-auth-button>
+        <twitter-auth-button
+          @click="loginWithTwitter"
+          label="Login with Twitter"
+          class="w-full mt-2"
+        ></twitter-auth-button>
 
         <span class="w-full flex justify-between mt-3">
           <router-link to="/register">
@@ -28,11 +33,13 @@
 <script>
   import GuestLayout from '../../Layouts/GuestLayout.vue';
   import GoogleAuthButton from '../../components/Buttons/Socials/GoogleAuthButton.vue';
+  import TwitterAuthButton from '../../components/Buttons/Socials/TwitterAuthButton.vue';
   import Card from '../../components/Widgets/Card.vue';
   import MainHeadline from '../../components/Typography/MainHeadline.vue';
   export default {
     components: {
       GuestLayout,
+      TwitterAuthButton,
       GoogleAuthButton,
       Card,
       MainHeadline,
@@ -40,6 +47,9 @@
     methods: {
       loginWithGoogle() {
         window.location = `${process.env.VUE_APP_API_URL}/auth/google`;
+      },
+      loginWithTwitter() {
+        window.location = `${process.env.VUE_APP_API_URL}/auth/twitter`;
       },
     },
   };

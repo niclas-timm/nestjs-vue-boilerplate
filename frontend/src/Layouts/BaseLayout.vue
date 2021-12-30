@@ -7,7 +7,7 @@
 
     <!-- Main -->
     <div
-      class="content--container px-8 mx-auto mt-4 leading-6 w-full lg:max-w-5xl lg:px-16"
+      class="content--container px-8 mx-auto pt-4 leading-6 w-full lg:max-w-5xl lg:px-16"
     >
       <main-headline :label="headline"></main-headline>
       <slot></slot>

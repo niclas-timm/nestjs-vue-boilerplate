@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
-import { MailService } from './../mail/mail.service';
-import { UserService } from './../user/user.service';
+import { MailService } from '../../mail/mail.service';
+import { UserService } from '../../user/user.service';
 import {
   BadRequestException,
   ConflictException,
@@ -12,9 +12,9 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { User } from 'src/user/user.entity';
-import { ForgotPasswordToken } from './forgot-password-token.entity';
+import { ForgotPasswordToken } from '../forgot-password-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import UserAndAccessTokenInterface from './interfaces/UserAndAccessTokenInterface';
+import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Injectable()
 export class AuthService {
@@ -85,11 +85,11 @@ export class AuthService {
       throw new ConflictException('Email already taken');
     }
     const hashedPassword = await bcrypt.hash(user.password, 8);
-    const res = await this.userService.createUser(
-      user.name,
-      user.email,
-      hashedPassword,
-    );
+    const res = await this.userService.createUser({
+      name: user.name,
+      email: user.email,
+      password: hashedPassword,
+    });
     const access_token = this.createAccessToken(res);
 
     // Send email.
@@ -128,7 +128,7 @@ export class AuthService {
     });
 
     // The url the user can click in the mail in order to verify the email address.
-    const url = `${process.env.FRONTEND_URL}auth/email/verify/${token}`;
+    const url = `${process.env.FRONTEND_URL}/auth/email/verify/${token}`;
 
     // Use the mailService to send the mail.
     this.mailService.sendUserConfirmation(user, 'BlaBla', url);
@@ -229,7 +229,7 @@ export class AuthService {
     await this.forgotPasswordRepository.save(forgotPasswordEntry);
 
     // Send email with the reset password link.
-    const url = `${process.env.FRONTEND_URL}auth/password/reset/${token}`;
+    const url = `${process.env.FRONTEND_URL}/auth/password/reset/${token}`;
     await this.mailService.sendResetPasswordLink(email, url);
   }
 
@@ -290,11 +290,55 @@ export class AuthService {
     }
 
     const newUser = await this.userService.createUser(
-      req.user.name,
-      req.user.email,
-      '123456',
-      req.user.avatar,
-      'google',
+      { ...req.user, social_channel: 'google', email_verified: true },
+      // req.user.name,
+      // req.user.email,
+      // '123456',
+      // req.user.avatar,
+      // 'google',
+    );
+    return {
+      user: newUser,
+      access_token: this.createAccessToken(newUser),
+    };
+  }
+
+  /**
+   * Log in or register with Google.
+   *
+   * @param {Request} req
+   *   The request object.
+   *
+   * @returns
+   */
+  async twitterLogin(req): Promise<UserAndAccessTokenInterface> | null {
+    // By the google strategy / google guard, the user is appended to the request object.
+    if (!req.user) {
+      return;
+    }
+
+    // Check if there is a user with this email already:
+    const existingUser: User = await this.userService.find({
+      email: req.user.email,
+    });
+    if (existingUser) {
+      return {
+        user: existingUser,
+        access_token: this.createAccessToken(existingUser),
+      };
+    }
+
+    const newUser = await this.userService.createUser(
+      {
+        ...req.user,
+        social_channel: 'twitter',
+        email_verified: true,
+      },
+      // req.user.name,
+      // req.user.email,
+      // '123456',
+      // req.user.avatar,
+      // 'twitter',
     );
     return {
       user: newUser,

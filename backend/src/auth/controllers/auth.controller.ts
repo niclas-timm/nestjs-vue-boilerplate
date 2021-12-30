@@ -1,6 +1,6 @@
 import { VerifyEmailTokenDto } from '../dtos/verify-email-token.dto';
 import { UpdatePasswordDto } from '../dtos/update-password.dto';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { JwtGuard } from '../guards/jwt.guard';
 import { LocalGuard } from '../guards/local.guard';
 import {

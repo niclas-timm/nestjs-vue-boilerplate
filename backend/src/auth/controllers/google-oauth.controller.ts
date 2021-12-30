@@ -1,9 +1,8 @@
-import { LocalGuard } from './../guards/local.guard';
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { GoogleOAuthGuard } from '../guards/google-auth.guard';
+import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Controller('auth/google')
 export class GoogleOAuthController {
