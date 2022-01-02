@@ -45,6 +45,20 @@ services:
     networks:
       - app
 
+  # Redis
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    networks:
+      - app
+  # rcli:
+  #   image: redis:latest
+  #   links:
+  #     - redis
+  #   command: redis-cli -h redis
+
+  # Postgres admin
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4

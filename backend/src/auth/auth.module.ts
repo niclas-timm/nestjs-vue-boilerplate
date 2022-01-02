@@ -1,3 +1,4 @@
+import { AuthSerializer } from './serialization.provider';
 import { TwitterStrategy } from './strategies/twitter.strategy';
 import { TwitterOAuthController } from './controllers/twitter-oauth.controller';
 import { ForgotPasswordToken } from './forgot-password-token.entity';
@@ -22,10 +23,13 @@ import { GoogleOAuthController } from './controllers/google-oauth.controller';
     JwtStrategy,
     GoogleStrategy,
     TwitterStrategy,
+    AuthSerializer,
   ],
   imports: [
     UserModule,
-    PassportModule,
+    PassportModule.register({
+      session: true,
+    }),
     MailModule,
     ConfigModule.forRoot(),
     JwtModule.register({

@@ -1,10 +1,11 @@
+import { AuthService } from './../services/auth.service';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-twitter';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
-  constructor() {
+  constructor(private readonly authService: AuthService) {
     super({
       consumerKey: process.env.TWITTER_CLIENT_ID,
       consumerSecret: process.env.TWITTER_SECRET,
@@ -22,12 +23,15 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
     done: VerifyCallback,
   ): Promise<any> {
     const { displayName, emails, photos } = profile;
-    const user = {
-      email: emails[0].value,
-      name: displayName,
-      avatar: photos[0].value,
-    };
+    const user = await this.authService.socialLogin({
+      user: {
+        email: emails[0].value,
+        name: displayName,
+        avatar: photos[0].value,
+      },
+      socialChannel: 'twitter',
+    });
 
-    return { ...user, access_token: accessToken };
+    return { ...user };
   }
 }

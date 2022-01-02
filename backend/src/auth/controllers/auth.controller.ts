@@ -1,3 +1,4 @@
+import { LoggedInGuard } from './../guards/logged-in.guard';
 import { VerifyEmailTokenDto } from '../dtos/verify-email-token.dto';
 import { UpdatePasswordDto } from '../dtos/update-password.dto';
 import { AuthService } from '../services/auth.service';
@@ -35,7 +36,8 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Post('login')
   async login(@Request() req): Promise<UserAndAccessTokenInterface> {
-    return this.authService.login(req.user);
+    // return this.authService.login(req.user);
+    return req.session;
   }
 
   /**
@@ -60,10 +62,17 @@ export class AuthController {
    *
    * @returns
    */
-  @UseGuards(JwtGuard)
+  @UseGuards(LoggedInGuard)
   @Get('user')
   async getUser(@Request() req): Promise<any> {
     return req.user;
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Get('logout')
+  logout(@Request() req) {
+    req.session.destroy();
+    return req.logOut();
   }
 
   /**

@@ -1,3 +1,4 @@
+import { RegisterUserDto } from './../dtos/register-user.dto';
 import { Repository } from 'typeorm';
 import { MailService } from '../../mail/mail.service';
 import { UserService } from '../../user/user.service';
@@ -56,19 +57,14 @@ export class AuthService {
   }
 
   /**
-   * Sign new Jwt token.
+   * Log user in. Logic is handled by passport middleware.
    *
    * @param user
    *   The user object.
    *
    * @returns {user, access_token}
    */
-  login(user: User): UserAndAccessTokenInterface {
-    return {
-      user,
-      access_token: this.createAccessToken(user),
-    };
-  }
+  login(user: User) {}
 
   /**
    * Register a new user.
@@ -79,7 +75,7 @@ export class AuthService {
    * @returns {object}
    *   The nw user.
    */
-  async registerUser(user: any): Promise<UserAndAccessTokenInterface> {
+  async registerUser(user: RegisterUserDto) {
     const existingUser = await this.userService.find({ email: user.email });
     if (existingUser) {
       throw new ConflictException('Email already taken');
@@ -90,29 +86,13 @@ export class AuthService {
       email: user.email,
       password: hashedPassword,
     });
-    const access_token = this.createAccessToken(res);
 
     // Send email.
     this.sendEmailVerificationMail(res);
 
     return {
       user: res,
-      access_token,
     };
-  }
-
-  /**
-   * Generate new access token.
-   *
-   * @param {User} user
-   *   The user object.
-   *
-   * @returns {string}
-   *   The newly created token.
-   */
-  private createAccessToken(user: User): string {
-    const payload = { ...user };
-    return this.jwtService.sign(payload);
   }
 
   /**
@@ -265,14 +245,14 @@ export class AuthService {
   }
 
   /**
-   * Log in or register with Google.
+   * Log in or register via oAuth.
    *
    * @param {Request} req
    *   The request object.
    *
    * @returns
    */
-  async googleLogin(req): Promise<UserAndAccessTokenInterface> | null {
+  async socialLogin(req: { user: any; socialChannel: string }) {
     // By the google strategy / google guard, the user is appended to the request object.
     if (!req.user) {
       return;
@@ -283,66 +263,16 @@ export class AuthService {
       email: req.user.email,
     });
     if (existingUser) {
-      return {
-        user: existingUser,
-        access_token: this.createAccessToken(existingUser),
-      };
+      return existingUser;
     }
 
-    const newUser = await this.userService.createUser(
-      { ...req.user, social_channel: 'google', email_verified: true },
-      // req.user.name,
-      // req.user.email,
-      // '123456',
-      // req.user.avatar,
-      // 'google',
-    );
-    return {
-      user: newUser,
-      access_token: this.createAccessToken(newUser),
-    };
-  }
-
-  /**
-   * Log in or register with Google.
-   *
-   * @param {Request} req
-   *   The request object.
-   *
-   * @returns
-   */
-  async twitterLogin(req): Promise<UserAndAccessTokenInterface> | null {
-    // By the google strategy / google guard, the user is appended to the request object.
-    if (!req.user) {
-      return;
-    }
-
-    // Check if there is a user with this email already:
-    const existingUser: User = await this.userService.find({
-      email: req.user.email,
+    const newUser = await this.userService.createUser({
+      ...req.user,
+      social_channel: req.socialChannel,
+      email_verified: true,
     });
-    if (existingUser) {
-      return {
-        user: existingUser,
-        access_token: this.createAccessToken(existingUser),
-      };
-    }
-
-    const newUser = await this.userService.createUser(
-      {
-        ...req.user,
-        social_channel: 'twitter',
-        email_verified: true,
-      },
-      // req.user.name,
-      // req.user.email,
-      // '123456',
-      // req.user.avatar,
-      // 'twitter',
-    );
     return {
       user: newUser,
-      access_token: this.createAccessToken(newUser),
     };
   }
 }

@@ -1,5 +1,6 @@
+import { TypeORMSession } from './session/session.entity';
 import { ForgotPasswordToken } from './auth/forgot-password-token.entity';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -23,7 +24,7 @@ import { MailModule } from './mail/mail.module';
       username: process.env.DB_USERNAME || 'nestjs',
       password: process.env.DB_PASSWORD || 'nestjs',
       database: process.env.DB_DATABASE || 'vuenestboilerplate',
-      entities: [User, ForgotPasswordToken],
+      entities: [User, ForgotPasswordToken, TypeORMSession],
       synchronize: true,
     }),
   ],

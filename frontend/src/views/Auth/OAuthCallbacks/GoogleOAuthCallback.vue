@@ -12,18 +12,11 @@
     },
 
     async beforeCreate() {
-      // Forward the request to the backend.
-      const loginSuccess = await this.$store.dispatch(
-        'socialAuth',
-        `${process.env.VUE_APP_API_URL}${this.$route.fullPath}`,
-      );
-
-      // If the login was successfull, redirect to dashboard.
-      if (loginSuccess) {
-        this.$router.push('/dashboard');
-      } else {
-        this.$router.push('/login');
+      const user = await this.$store.dispatch('fetchUser');
+      if (user) {
+        return this.$router.push('/dashboard');
       }
+      return this.$router.push('/login');
     },
   };
 </script>

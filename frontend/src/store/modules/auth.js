@@ -38,9 +38,7 @@ export default {
         const res = await axios.get(
           `${process.env.VUE_APP_API_URL}/auth/user`,
           {
-            headers: {
-              Authorization: `Bearer ${window.localStorage.access_token}`,
-            },
+            withCredentials: true
           },
         );
         if (res.status === 200) {
@@ -59,11 +57,13 @@ export default {
     },
     async socialAuth({ commit }, url) {
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(url, {
+          withCredentials: true
+        });
+        console.log(res)
         if (res.status === 200) {
           commit('SET_USER', res.data.user);
           commit('SET_ACCESS_TOKEN', res.data.access_token);
-          window.localStorage.setItem('access_token', res.data.access_token);
           return true;
         }
       } catch (error) {
@@ -74,7 +74,11 @@ export default {
       }
     },
     async logout({ commit }) {
-      window.localStorage.removeItem('access_token');
+      // window.localStorage.removeItem('access_token');
+      const res = await axios.get('http://localhost:3000/auth/logout', {
+        withCredentials: true
+      })
+
       commit('SET_USER_ERROR_OR_LOGOUT');
     },
   },

@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards, Redirect } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Redirect, Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../services/auth.service';
 import { TwitterOAuthGuard } from '../guards/twitter-auth.guard';
@@ -13,14 +13,8 @@ export class TwitterOAuthController {
   async googleAuth(@Req() req) {}
 
   @Get('callback')
-  @Redirect(`${process.env.FRONTEND_URL}/auth/twitter/callback`, 302)
-  @UseGuards(AuthGuard('twitter'))
-  async googleAuthRedirect(@Req() req) {
-    const userAndAccessToken: UserAndAccessTokenInterface =
-      await this.authService.twitterLogin(req);
-
-    return {
-      url: `${process.env.FRONTEND_URL}/auth/twitter/callback?token=${userAndAccessToken.access_token}`,
-    };
+  @UseGuards(TwitterOAuthGuard)
+  async twitterAuthRedirect(@Req() req, @Res() res) {
+    res.redirect(`${process.env.FRONTEND_URL}/auth/twitter/callback`);
   }
 }

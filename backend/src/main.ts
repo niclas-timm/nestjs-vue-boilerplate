@@ -1,7 +1,11 @@
+import { TypeORMSession } from './session/session.entity';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
+import { TypeormStore } from 'connect-typeorm/out';
+import { getRepository } from 'typeorm';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,14 +21,27 @@ async function bootstrap() {
   app.use(
     session({
       secret: SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
+      // resave: false,
+      // saveUninitialized: false,
+      store: new TypeormStore().connect(getRepository(TypeORMSession)),
+      cookie: {
+        sameSite: false,
+        httpOnly: true,
+        maxAge: 600000,
+      },
     }),
   );
 
+  // Initliaze passport & passport session support.
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   // Allow requests from frontend.
   app.enableCors({
-    origin: 'http://localhost:8080',
+    origin: ALLOWED_CORS_ORIGIN,
+    allowedHeaders: '*',
+    credentials: true,
+    methods: '*',
   });
 
   // Start the app.
