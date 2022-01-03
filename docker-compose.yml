@@ -5,7 +5,7 @@ services:
     build: .
     volumes:
       - './backend/:/var/www/html'
-    command: bash -c "npm install && npm run start:dev"
+    command: bash -c "npm install && npm run start:debug"
     ports:
       - 3000:3000
       - 9229:9229
