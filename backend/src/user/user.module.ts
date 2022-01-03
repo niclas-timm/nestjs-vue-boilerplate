@@ -1,4 +1,4 @@
-import { ForgotPasswordToken } from '../auth/forgot-password-token.entity';
+import { ForgotPasswordToken } from '../auth/entities/forgot-password-token.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';

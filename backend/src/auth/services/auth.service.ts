@@ -12,7 +12,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { User } from 'src/user/user.entity';
-import { ForgotPasswordToken } from '../forgot-password-token.entity';
+import { ForgotPasswordToken } from '../entities/forgot-password-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()

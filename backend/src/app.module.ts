@@ -1,5 +1,5 @@
-import { TypeORMSession } from './session/session.entity';
-import { ForgotPasswordToken } from './auth/forgot-password-token.entity';
+import { TypeORMSession } from './auth/entities/session.entity';
+import { ForgotPasswordToken } from './auth/entities/forgot-password-token.entity';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

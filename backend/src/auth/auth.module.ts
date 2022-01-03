@@ -1,7 +1,7 @@
 import { AuthSerializer } from './serialization.provider';
 import { TwitterStrategy } from './strategies/twitter.strategy';
 import { TwitterOAuthController } from './controllers/twitter-oauth.controller';
-import { ForgotPasswordToken } from './forgot-password-token.entity';
+import { ForgotPasswordToken } from './entities/forgot-password-token.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from './../mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';

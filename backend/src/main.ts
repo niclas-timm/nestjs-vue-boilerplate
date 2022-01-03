@@ -1,4 +1,4 @@
-import { TypeORMSession } from './session/session.entity';
+import { TypeORMSession } from './auth/entities/session.entity';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
