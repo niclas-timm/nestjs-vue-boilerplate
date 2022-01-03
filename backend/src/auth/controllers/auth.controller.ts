@@ -19,7 +19,6 @@ import {
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { ForgotPasswordDto } from '../dtos/forgot-password.dto';
 import { ResetPasswordDto } from '../dtos/reset-password.dto';
-import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Controller('auth')
 export class AuthController {
@@ -35,8 +34,7 @@ export class AuthController {
    */
   @UseGuards(LocalGuard)
   @Post('login')
-  async login(@Request() req): Promise<UserAndAccessTokenInterface> {
-    // return this.authService.login(req.user);
+  async login(@Request() req) {
     return req.session;
   }
 

@@ -9,19 +9,16 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { User } from 'src/user/user.entity';
 import { ForgotPasswordToken } from '../forgot-password-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
     private mailService: MailService,
     @InjectRepository(ForgotPasswordToken)
     private forgotPasswordRepository: Repository<ForgotPasswordToken>,

@@ -10,7 +10,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../services/auth.service';
 import { GoogleOAuthGuard } from '../guards/google-auth.guard';
-import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Controller('auth/google')
 export class GoogleOAuthController {

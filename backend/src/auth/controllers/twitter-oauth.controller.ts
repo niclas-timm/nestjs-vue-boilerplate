@@ -2,7 +2,6 @@ import { Controller, Get, Req, UseGuards, Redirect, Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../services/auth.service';
 import { TwitterOAuthGuard } from '../guards/twitter-auth.guard';
-import UserAndAccessTokenInterface from '../interfaces/UserAndAccessTokenInterface';
 
 @Controller('auth/twitter')
 export class TwitterOAuthController {
