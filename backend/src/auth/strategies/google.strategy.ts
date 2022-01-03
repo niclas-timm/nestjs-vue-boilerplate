@@ -1,12 +1,12 @@
+import { OAuthService } from './../services/oauth.service';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 import { Injectable } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly OAuthService: OAuthService) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
@@ -23,7 +23,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ): Promise<any> {
     const { name, emails, photos } = profile;
 
-    const user = await this.authService.socialLogin({
+    const user = await this.OAuthService.socialLogin({
       user: {
         email: emails[0].value,
         name: `${name.givenName} ${name.familyName}`,

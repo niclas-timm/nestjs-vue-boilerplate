@@ -1,3 +1,4 @@
+import { PasswordService } from './../services/password-auth.service';
 import { LoggedInGuard } from './../guards/logged-in.guard';
 import { VerifyEmailTokenDto } from '../dtos/verify-email-token.dto';
 import { UpdatePasswordDto } from '../dtos/update-password.dto';
@@ -21,7 +22,10 @@ import { ResetPasswordDto } from '../dtos/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   /**
    * Log user in.
@@ -101,7 +105,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Patch('password/update')
   async updatePassword(@Request() req, @Body() body: UpdatePasswordDto) {
-    return await this.authService.changePassword(
+    return await this.passwordService.changePassword(
       req.user,
       body.oldPassword,
       body.newPassword,
@@ -116,7 +120,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Post('password/forgotlink')
   async sendForgotPasswordLink(@Body() body: ForgotPasswordDto) {
-    this.authService.sendForgotPasswordLink(body.email);
+    this.passwordService.sendForgotPasswordLink(body.email);
   }
 
   /**
@@ -128,6 +132,6 @@ export class AuthController {
   @Post('password/reset')
   @UsePipes(new ValidationPipe({ transform: true }))
   async resetPassword(@Body() body: ResetPasswordDto) {
-    this.authService.resetPassword(body.token, body.newPassword);
+    this.passwordService.resetPassword(body.token, body.newPassword);
   }
 }

@@ -1,4 +1,6 @@
-import { AuthSerializer } from './serialization.provider';
+import { PasswordService } from './services/password-auth.service';
+import { OAuthService } from './services/oauth.service';
+import { AuthSerializer } from './providers/serialization.provider';
 import { TwitterStrategy } from './strategies/twitter.strategy';
 import { TwitterOAuthController } from './controllers/twitter-oauth.controller';
 import { ForgotPasswordToken } from './entities/forgot-password-token.entity';
@@ -18,6 +20,8 @@ import { GoogleOAuthController } from './controllers/google-oauth.controller';
 @Module({
   providers: [
     AuthService,
+    OAuthService,
+    PasswordService,
     LocalStrategy,
     GoogleStrategy,
     TwitterStrategy,
@@ -36,7 +40,7 @@ import { GoogleOAuthController } from './controllers/google-oauth.controller';
     }),
     TypeOrmModule.forFeature([ForgotPasswordToken]),
   ],
-  exports: [AuthService],
+  exports: [AuthService, OAuthService, PasswordService],
   controllers: [AuthController, GoogleOAuthController, TwitterOAuthController],
 })
 export class AuthModule {}
