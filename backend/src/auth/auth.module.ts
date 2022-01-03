@@ -4,7 +4,6 @@ import { TwitterOAuthController } from './controllers/twitter-oauth.controller';
 import { ForgotPasswordToken } from './forgot-password-token.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from './../mail/mail.module';
-import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from './../user/user.module';
@@ -20,7 +19,6 @@ import { GoogleOAuthController } from './controllers/google-oauth.controller';
   providers: [
     AuthService,
     LocalStrategy,
-    JwtStrategy,
     GoogleStrategy,
     TwitterStrategy,
     AuthSerializer,

@@ -2,7 +2,6 @@ import { LoggedInGuard } from './../guards/logged-in.guard';
 import { VerifyEmailTokenDto } from '../dtos/verify-email-token.dto';
 import { UpdatePasswordDto } from '../dtos/update-password.dto';
 import { AuthService } from '../services/auth.service';
-import { JwtGuard } from '../guards/jwt.guard';
 import { LocalGuard } from '../guards/local.guard';
 import {
   Body,
@@ -98,7 +97,7 @@ export class AuthController {
    *
    * @returns
    */
-  @UseGuards(JwtGuard)
+  @UseGuards(LoggedInGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   @Patch('password/update')
   async updatePassword(@Request() req, @Body() body: UpdatePasswordDto) {
