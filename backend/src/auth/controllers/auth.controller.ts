@@ -66,6 +66,7 @@ export class AuthController {
   @UseGuards(LoggedInGuard)
   @Get('user')
   async getUser(@Request() req): Promise<any> {
+    delete req.user.password;
     return req.user;
   }
 

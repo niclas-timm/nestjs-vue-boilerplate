@@ -1,5 +1,5 @@
 import { UserService } from './../../user/user.service';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
 
 @Injectable()
@@ -15,9 +15,9 @@ export class OAuthService {
    * @returns
    */
   async socialLogin(req: { user: any; socialChannel: string }) {
-    // By the google strategy / google guard, the user is appended to the request object.
+    // Passports middleware adds the user to the request object.
     if (!req.user) {
-      return;
+      throw new BadRequestException('No account presented.');
     }
 
     // Check if there is a user with this email already:

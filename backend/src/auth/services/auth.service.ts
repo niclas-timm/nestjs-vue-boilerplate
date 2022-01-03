@@ -7,6 +7,7 @@ import {
   Inject,
   Injectable,
   LoggerService,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -37,18 +38,23 @@ export class AuthService {
     // Find the user by email from database and also load the password.
     const user = await this.userService.find({ email }, true);
 
+    // Accounts that are registered via oAuth should not be accessible via local signin.
+    if (user.social_channel) {
+      throw new UnauthorizedException('Email or password incorrect.');
+    }
+
     if (!user) {
-      return null;
+      throw new UnauthorizedException('Email or password incorrect.');
     }
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    // Remove the password again and send it to client.
-    if (isPasswordCorrect) {
-      delete user.password;
-      return user;
+    if (!isPasswordCorrect) {
+      throw new UnauthorizedException('Email or password incorrect.');
     }
 
-    return null;
+    // Remove the password again and send it to client.
+    delete user.password;
+    return user;
   }
 
   /**
@@ -61,7 +67,6 @@ export class AuthService {
    *   The nw user.
    */
   async registerUser(user: RegisterUserDto) {
-    this.logger.error('Some error message');
     const existingUser = await this.userService.find({ email: user.email });
     if (existingUser) {
       throw new ConflictException('Email already taken');
@@ -72,6 +77,8 @@ export class AuthService {
       email: user.email,
       password: hashedPassword,
     });
+
+    delete res.password;
 
     // Send email.
     this.sendEmailVerificationMail(res);
