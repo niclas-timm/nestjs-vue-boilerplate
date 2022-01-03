@@ -1,6 +1,6 @@
 import { TypeORMSession } from './auth/entities/session.entity';
 import { ForgotPasswordToken } from './auth/entities/forgot-password-token.entity';
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -9,6 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { MailModule } from './mail/mail.module';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 
 @Module({
   // Imports.
@@ -17,6 +19,14 @@ import { MailModule } from './mail/mail.module';
     AuthModule,
     MailModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    WinstonModule.forRoot({
+      level: 'error',
+      transports: [
+        new winston.transports.File({
+          filename: process.env.ERROR_LOG_FILE_PATH || 'error.log',
+        }),
+      ],
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'database',

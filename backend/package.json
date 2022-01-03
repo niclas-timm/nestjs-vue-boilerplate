@@ -36,6 +36,7 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
+    "nest-winston": "^1.6.2",
     "nodemailer": "^6.7.2",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
@@ -46,7 +47,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

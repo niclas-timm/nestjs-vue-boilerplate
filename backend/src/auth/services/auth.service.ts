@@ -4,17 +4,22 @@ import { UserService } from '../../user/user.service';
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
+  LoggerService,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { User } from 'src/user/user.entity';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private mailService: MailService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   /**
@@ -56,6 +61,7 @@ export class AuthService {
    *   The nw user.
    */
   async registerUser(user: RegisterUserDto) {
+    this.logger.error('Some error message');
     const existingUser = await this.userService.find({ email: user.email });
     if (existingUser) {
       throw new ConflictException('Email already taken');
