@@ -7,7 +7,7 @@ It includes:
 - :closed_lock_with_key: Authentication (including oAuth for Google and Twitter, Email verification, password reset etc.)
 - :cd: Rich configuration possibilities via environment variables
 - :whale: A dockerized environment (usage not mandatory but recommended): Backend & frontend server, Postgres, pgadmin, Redis, Mailhog
-- :e-mail: Sending email + HTML emails templates
+- :e-mail: Sending email + HTML email templates
 - :bug: Debugging setup for VS Code for the backend
 
 # Quick start
@@ -29,25 +29,35 @@ You can configure large parts of the app via environment variables. There are th
 ### Backend
 
 Execute the following commands:
-`cd backend && cp .env.example .env`
 
-Fill in the values as needed. If you plan to use the _dockerized_ environment provided in this repo, there is _no need to change the database and email configuration_
+```
+cd backend && cp .env.example .env
+```
+
+Fill in the values as needed. If you plan to use the **dockerized** environment provided in this repo, there is **no need to change the database and email configuration**
 
 ### Frontend
 
 Navigate into the frontend directory and execute the following commands:
-`cp .env.local.example .env.local`
-There is not much to do, actually. Just make sure that you enter the right API URL without a trailing slash. by default, NestJS runs on `http://localhost:3000`, so you probably don't need to change the default value in `.env.local`.
+
+```
+cp .env.local.example .env.local
+```
+
+There is not much to do, actually. Just make sure that you enter the right `VUE_APP_API_URL` without a trailing slash. By default, NestJS runs on `http://localhost:3000`, so you probably don't need to change the default value in `.env.local`.
 
 ### Docker environment (optional)
 
 > :bulb: **Not using Docker?**
 > You can ignore this section if you don't want to use Docker for your development environment.
 
-First, execute:
-`cp .env.example .env`
+First, in the root directory, execute:
+
+```
+cp .env.example .env
+```
 
 Afterwards, you can adjust the values as you wish. They will be used in the `docker-compose.yml`file for configuring your containers. However, you can also stick to the default values as they will get the job done :muscle: .
 
-> :warning: **Don't use in production**
+> :warning: **Docker containers not suited for production**
 > The provided Docker configuration is not secure enough for a production environment. It is only supposed to be used during development.
