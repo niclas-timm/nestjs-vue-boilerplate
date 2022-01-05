@@ -38,7 +38,7 @@ export default {
         const res = await axios.get(
           `${process.env.VUE_APP_API_URL}/auth/user`,
           {
-            withCredentials: true
+            withCredentials: true,
           },
         );
         if (res.status === 200) {
@@ -55,12 +55,44 @@ export default {
         return false;
       }
     },
+    async register({ commit }, formData) {
+      try {
+        const res = await axios.post(
+          `${process.env.VUE_APP_API_URL}/auth/register`,
+          {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+
+        if (res.status === 201) {
+          window.location = `${process.env.VUE_APP_FRONTEND_URL}/dashboard`;
+        }
+      } catch (error) {
+        if (error.response.data) {
+          commit('SET_USER_ERROR_OR_LOGOUT', {
+            ...error.response.data,
+            area: 'register',
+          });
+          return this.error;
+        }
+        commit('SET_USER_ERROR_OR_LOGOUT', {
+          error: 'Server error',
+          message: 'Sorry, something went wrong',
+          statusCode: 500,
+        });
+        return this.error;
+      }
+    },
     async socialAuth({ commit }, url) {
       try {
         const res = await axios.get(url, {
-          withCredentials: true
+          withCredentials: true,
         });
-        console.log(res)
         if (res.status === 200) {
           commit('SET_USER', res.data.user);
           commit('SET_ACCESS_TOKEN', res.data.access_token);
@@ -76,8 +108,8 @@ export default {
     async logout({ commit }) {
       // window.localStorage.removeItem('access_token');
       const res = await axios.get('http://localhost:3000/auth/logout', {
-        withCredentials: true
-      })
+        withCredentials: true,
+      });
 
       commit('SET_USER_ERROR_OR_LOGOUT');
     },

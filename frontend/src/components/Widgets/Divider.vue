@@ -4,13 +4,13 @@
     aria-orientation="horizontal"
   >
     <hr
-      class="w-full border-t-1 border-r-0 border-l-0 border-b-0 border-gray-50"
+      class="w-full border-t-1 border-r-0 border-l-0 border-b-0 border-gray-100"
     />
     <span class="px-2">
       {{ label }}
     </span>
     <hr
-      class="w-full border-t-1 border-r-0 border-l-0 border-b-0 border-gray-50"
+      class="w-full border-t-1 border-r-0 border-l-0 border-b-0 border-gray-100"
     />
   </div>
 </template>

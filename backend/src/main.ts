@@ -47,9 +47,8 @@ async function bootstrap() {
   // Allow requests from frontend.
   app.enableCors({
     origin: ALLOWED_CORS_ORIGIN,
-    allowedHeaders: '*',
     credentials: true,
-    methods: '*',
+    methods: 'GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE',
   });
 
   await app.listen(APP_PORT);

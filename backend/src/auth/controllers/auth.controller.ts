@@ -11,6 +11,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   Request,
   UseGuards,
   UsePipes,
@@ -51,8 +52,18 @@ export class AuthController {
    */
   @Post('register')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async registerUser(@Body() registerUserDto: RegisterUserDto) {
-    return this.authService.registerUser(registerUserDto);
+  async registerUser(@Body() registerUserDto: RegisterUserDto, @Request() req) {
+    const result = await this.authService.registerUser(registerUserDto);
+    if (result.user) {
+      req.login(result.user, function (err) {
+        if (err) {
+          throw new Error(
+            'Sorry, somethin went wrong. We could register but sign you in.',
+          );
+        }
+        return req.session;
+      });
+    }
   }
 
   /**
