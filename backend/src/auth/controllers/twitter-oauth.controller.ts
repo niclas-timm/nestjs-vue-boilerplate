@@ -10,6 +10,6 @@ export class TwitterOAuthController {
   @Get('callback')
   @UseGuards(TwitterOAuthGuard)
   async twitterAuthRedirect(@Req() req, @Res() res) {
-    res.redirect(`${process.env.FRONTEND_URL}/auth/twitter/callback`);
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   }
 }

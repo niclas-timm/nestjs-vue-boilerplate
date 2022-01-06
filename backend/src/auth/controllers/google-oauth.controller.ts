@@ -11,6 +11,6 @@ export class GoogleOAuthController {
   @Get('callback')
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Request() req, @Res() res) {
-    res.redirect(`${process.env.FRONTEND_URL}/auth/google/callback`);
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   }
 }

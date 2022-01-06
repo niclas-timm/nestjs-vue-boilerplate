@@ -142,3 +142,53 @@ So, if you want to create and send additional mails, you need to do the followin
 - Create a new template under `/templates`
 - Create a new method in `mail.service.ts`. In the `context` option, choose the values for the variables you declared in the template file
 - Call the newly created method somewhere else in your code in order so send the mail.
+
+## Authentication frontend :arrow_right:
+
+On the frontend, authentication is primarily handled in the Vuex store, specifically under `/frontend/src/store/modules/auth.js`. There, all the api calls are made and the user data and potential errors are stored in the Vuex store.
+
+### Handling OAuth on the frontend
+
+As described above, when clicking on "Login with Google/Twitter" the user will be:
+
+- Directed to the authentication page of Google or Twitter
+- Redirected to the backend, specifically to `/auth/{google_or_twitter}/callback`, where Passport does some magic
+- Finally, the user will be redirected to the frontend
+
+## Logging :memo:
+
+By default, NestJS logs everything to the console. However, especially in production, it might be useful to receive all errors in a file, like `error.log`.
+To achieve this, we use the [nest-winston](https://github.com/gremo/nest-winston) package.
+
+### Enabling logging
+
+By default, logging is disabled. To change this, go to `/backend/src/.env` and change the `ENABLE_LOGGING`from `false` to `true`.
+Also in the `.env` file, you can configure the file path for logging via the `ERROR_LOG_FILE_PATH` variable, which is where the logging information will be stored. By default it is `error.log`.
+
+### Configure logging
+
+You can configure the logging behaviour in the logging module under `/backend/src/logger/logger.module.ts`. By default, only error messages will be logged to the file you declared in the `.env` file (see above). If you also want other messages like info messages to be logged, you have to manually add them to `logger.module.ts`. For more information on how to do that check out the [nest-winston documentation](https://github.com/gremo/nest-winston).
+
+### Using the custom logger
+
+To log a message, you must do the following:
+
+1. Add the logger service as a dependeny. For example in a service file:
+
+```ts
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { Injectable, LoggerService } from '@nestjs/common';
+
+export class MyService {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
+}
+```
+
+To then log a message, do:
+
+```ts
+this.logger.error('My error message goes here');
+```
