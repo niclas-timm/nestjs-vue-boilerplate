@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 export default {
+  //===========================
+  // STATEI
+  //===========================
   state: {
     user: {},
     loadingUser: true,
@@ -9,6 +12,9 @@ export default {
     error: {},
   },
 
+  //===========================
+  // Mutations.
+  //===========================
   mutations: {
     SET_USER(state, user) {
       state.user = user;
@@ -32,15 +38,27 @@ export default {
       state.access_token = '';
     },
   },
+
+  //===========================
+  // ACTIONS
+  //===========================
   actions: {
+    /**
+     * Fetch the currently logged in user from the DB.
+     * @param {object} context
+     *  
+     * @returns 
+     */
     async fetchUser({ commit }) {
       try {
+        // Send api request.
         const res = await axios.get(
           `${process.env.VUE_APP_API_URL}/auth/user`,
           {
             withCredentials: true,
           },
         );
+        // Put user into store.
         if (res.status === 200) {
           commit('SET_USER', res.data);
           commit(
@@ -50,11 +68,31 @@ export default {
           return true;
         }
       } catch (error) {
-        commit('SET_USER_ERROR_OR_LOGOUT', error.response.data);
-        commit('SET_ACCESS_TOKEN');
-        return false;
+        if (error.response.data) {
+          commit('SET_USER_ERROR_OR_LOGOUT', { ...error.response.data, area: 'fetchUser' });
+          return false;
+        }
+        commit('SET_USER_ERROR_OR_LOGOUT', {
+          error: 'Server error',
+          message: 'Sorry, something went wrong',
+          statusCode: 500,
+          area: 'fetchUser',
+        })
+
       }
     },
+
+    /**
+     * Register user via email and password.
+     * 
+     * @param {object} context
+     *   The context object. 
+     * 
+     * @param {object} formData 
+     *   The form data.
+     * @returns 
+     * 
+     */
     async register({ commit }, formData) {
       try {
         const res = await axios.post(
@@ -84,29 +122,61 @@ export default {
           error: 'Server error',
           message: 'Sorry, something went wrong',
           statusCode: 500,
+          area: 'register',
         });
         return this.error;
       }
     },
-    async socialAuth({ commit }, url) {
+
+    /**
+     * Log in user via email and password.
+     * 
+     * @param {object} context
+     *   The context object.
+     * 
+     * @param {object} formData
+     *   The form data that holds email and password.
+     *  
+     * @returns 
+     */
+    async login({ commit }, { email, password }) {
       try {
-        const res = await axios.get(url, {
-          withCredentials: true,
-        });
-        if (res.status === 200) {
-          commit('SET_USER', res.data.user);
-          commit('SET_ACCESS_TOKEN', res.data.access_token);
-          return true;
+        const res = await axios.post(
+          `${process.env.VUE_APP_API_URL}/auth/login`,
+          { email, password },
+          {
+            withCredentials: true,
+          },
+        );
+        if (res.status === 201) {
+          window.location = `${process.env.VUE_APP_FRONTEND_URL}/dashboard`;
         }
       } catch (error) {
-        commit('SET_USER_ERROR_OR_LOGOUT', error.response.data);
-        commit('SET_USER', {});
-        commit('SET_ACCESS_TOKEN', '');
-        return false;
+        console.log(error.response)
+        if (error.response && error.response.data) {
+          commit('SET_USER_ERROR_OR_LOGOUT', {
+            ...error.response.data,
+            area: 'login',
+          });
+          return this.error;
+        }
+        commit('SET_USER_ERROR_OR_LOGOUT', {
+          error: 'Server error',
+          message: 'Sorry, something went wrong',
+          statusCode: 500,
+          area: 'login',
+        });
+        return this.error;
       }
     },
+
+    /**
+     * Log user out.
+     * 
+     * @param {object} context
+     *   The context object. 
+     */
     async logout({ commit }) {
-      // window.localStorage.removeItem('access_token');
       const res = await axios.get('http://localhost:3000/auth/logout', {
         withCredentials: true,
       });

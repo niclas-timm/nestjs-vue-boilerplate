@@ -38,14 +38,15 @@ export class AuthService {
     // Find the user by email from database and also load the password.
     const user = await this.userService.find({ email }, true);
 
+    if (!user) {
+      throw new UnauthorizedException('Email or password incorrect.');
+    }
+
     // Accounts that are registered via oAuth should not be accessible via local signin.
     if (user.social_channel) {
       throw new UnauthorizedException('Email or password incorrect.');
     }
 
-    if (!user) {
-      throw new UnauthorizedException('Email or password incorrect.');
-    }
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
