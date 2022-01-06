@@ -1,5 +1,7 @@
 # Vue NestJs Boilerplate
 
+Have any questions? Want to get in contact? Hit me up on [Twitter](https://twitter.com/niclas_timm) :bird: !
+
 A boilerplate for a Full-Stack application using NestJS 8 for the backend and Vue 3 for the frontend.
 
 It includes:
