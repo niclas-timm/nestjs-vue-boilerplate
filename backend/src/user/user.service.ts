@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import * as gravatar from 'gravatar';
 
 @Injectable()
 export class UserService {
@@ -33,11 +34,16 @@ export class UserService {
   async createUser(user: UserInterface): Promise<User> {
     const { name, email, password, avatar, social_channel, email_verified } =
       user;
+
+    // Create default avatar.
+    const userAvatar =
+      avatar || gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true);
+
     const newUser = await this.userRepository.create({
       name,
       email,
       password: password || '',
-      avatar: avatar || '',
+      avatar: userAvatar || '',
       social_channel: social_channel || '',
       email_verified: email_verified || false,
     });

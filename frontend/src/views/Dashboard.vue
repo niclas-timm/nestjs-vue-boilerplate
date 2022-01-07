@@ -1,5 +1,12 @@
 <template>
-  <auth-layout :headline="headline"> </auth-layout>
+  <auth-layout :headline="headline">
+    <div>Hi there, {{ $store.state.auth.user.name }}</div>
+
+    <div>
+      Thanks for using the NestJS Vue Boilerplate. I really hope you enjoy it so
+      far!
+    </div>
+  </auth-layout>
 </template>
 <script>
   import AuthLayout from '../Layouts/AuthLayout.vue';

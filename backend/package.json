@@ -34,6 +34,7 @@
     "class-validator": "^0.13.2",
     "connect-typeorm": "^1.1.4",
     "express-session": "^1.17.2",
+    "gravatar": "^1.8.2",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "nest-winston": "^1.6.2",
